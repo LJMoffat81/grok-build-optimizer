@@ -96,11 +96,19 @@ To also disable Teams and MuseHub:
 
 ## WSL + Rust
 
-Rust is ready. WSL 2.7.3 is installed but needs a **reboot**, then BIOS virtualization (AMD-V / SVM Mode) if hypervisor is still off:
+Rust is ready (`rustc 1.96`). WSL 2.7.3 is installed but **blocked**: virtualization is off in BIOS.
+
+**Your board:** ASUS ROG CROSSHAIR VIII IMPACT
+
+1. Restart and press **DEL** or **F2** to enter BIOS
+2. **Advanced** → **CPU Configuration** → **SVM Mode** → **Enabled**
+   (alternate: **Advanced** → **AMD CBS** → **CPU Common Options** → **SVM Mode**)
+3. Press **F10** to save and reboot
+4. Then run:
 
 ```powershell
-# After reboot:
-.\scripts\setup-wsl-post-reboot.ps1
+.\scripts\enable-virtualization.ps1    # verify Windows side (admin)
+.\scripts\setup-wsl-post-reboot.ps1  # install Ubuntu
 ```
 
 ## Manual Tweaks (optional)
