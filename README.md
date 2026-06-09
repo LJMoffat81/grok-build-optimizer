@@ -15,7 +15,7 @@ Tune your Windows workstation for [Grok Build](https://x.ai) AI coding — faste
 | Terminal | Windows Terminal |
 | Dev tools | Git, Node 24, Python 3.12 |
 
-**Critical finding:** Power plan is currently **Power Saver**. That throttles CPU during long Grok agent runs.
+**Status:** Power plan switched to **Balanced**. `COLORTERM=truecolor` set (restart terminal). Defender exclusions still need admin.
 
 ## Quick Start
 
@@ -52,11 +52,12 @@ Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
 
 ## Optimization Checklist
 
-- [ ] Run baseline audit
-- [ ] Switch off Power Saver
-- [ ] Apply script optimizations
-- [ ] Run `/terminal-setup` in Grok
-- [ ] Re-run audit and compare reports
+- [x] Run baseline audit
+- [x] Switch off Power Saver (now Balanced)
+- [x] Apply user-level optimizations (PATH, COLORTERM, Grok config)
+- [ ] Defender exclusions (requires admin — double-click `scripts/run-admin-optimizations.bat`)
+- [ ] Restart terminal, then run `/terminal-setup` in Grok
+- [x] Re-run audit
 - [ ] Fine-tune `~/.grok/config.toml` for your workflow
 
 ## Project Structure

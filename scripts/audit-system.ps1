@@ -92,7 +92,9 @@ foreach ($tool in $tools) {
 Write-Section "Terminal Environment"
 $report += "TERM_PROGRAM: $env:TERM_PROGRAM"
 $report += "WT_SESSION: $env:WT_SESSION"
-$report += "COLORTERM: $env:COLORTERM"
+$colorTermUser = [Environment]::GetEnvironmentVariable("COLORTERM", "User")
+$report += "COLORTERM (session): $env:COLORTERM"
+$report += "COLORTERM (user): $colorTermUser"
 $report += "Shell: $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
 
 $wtSettings = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
@@ -125,8 +127,10 @@ $issues = @()
 if ($active -match "Power saver|a1841308-3541-4fab-bc81-f71556f20b4a") {
     $issues += "[HIGH] Power plan is Power Saver - switch to Balanced or High Performance for AI dev work."
 }
-if (-not $env:COLORTERM) {
+if (-not $colorTermUser -and -not $env:COLORTERM) {
     $issues += "[MED]  COLORTERM not set - add COLORTERM=truecolor for Windows Terminal profiles."
+} elseif ($colorTermUser -and -not $env:COLORTERM) {
+    $issues += "[LOW]  COLORTERM set for user but not this session - restart terminal."
 }
 if (-not (Get-Command grok -ErrorAction SilentlyContinue)) {
     $issues += "[MED]  grok not on PATH - add %USERPROFILE%\.grok\bin to User PATH."
