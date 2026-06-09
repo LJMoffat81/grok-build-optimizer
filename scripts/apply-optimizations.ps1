@@ -119,7 +119,7 @@ if (-not $SkipDefender) {
     } else {
         $exclusions = @(
             $grokHome,
-            (Join-Path $env:USERPROFILE "Projects"),
+            "C:\Projects",
             (Join-Path $env:LOCALAPPDATA "npm-cache"),
             (Join-Path $env:LOCALAPPDATA "pip\cache")
         )

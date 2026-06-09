@@ -15,7 +15,7 @@ Tune your Windows workstation for [Grok Build](https://x.ai) AI coding — faste
 | Terminal | Windows Terminal |
 | Dev tools | Git, Node 24, Python 3.12 |
 
-**Status:** Power plan switched to **Balanced**. `COLORTERM=truecolor` set (restart terminal). Defender exclusions still need admin.
+**Status:** All optimizations applied. Power plan **Balanced**, `COLORTERM=truecolor` set, Defender exclusions active. Restart terminal, then run `/terminal-setup` in Grok.
 
 ## Quick Start
 
@@ -55,7 +55,7 @@ Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
 - [x] Run baseline audit
 - [x] Switch off Power Saver (now Balanced)
 - [x] Apply user-level optimizations (PATH, COLORTERM, Grok config)
-- [ ] Defender exclusions (requires admin — double-click `scripts/run-admin-optimizations.bat`)
+- [x] Defender exclusions (applied via elevated script)
 - [ ] Restart terminal, then run `/terminal-setup` in Grok
 - [x] Re-run audit
 - [ ] Fine-tune `~/.grok/config.toml` for your workflow
