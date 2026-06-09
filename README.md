@@ -32,10 +32,10 @@ cd C:\Projects\grok-build-optimizer
 .\scripts\apply-optimizations.ps1
 ```
 
-After applying, restart your terminal and launch Grok:
+Launch Grok from the project:
 
 ```powershell
-grok --cwd C:\Projects\grok-build-optimizer
+.\scripts\launch-grok.ps1
 ```
 
 Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
@@ -60,7 +60,8 @@ Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
 - [x] Rust installed (rustc 1.96, cargo on PATH)
 - [x] Reboot PC + enable SVM in BIOS
 - [x] WSL2 + Ubuntu 26.04 LTS installed
-- [ ] Restart terminal, then run `/terminal-setup` in Grok
+- [x] Workstation verified (all checks pass)
+- [ ] Run `/terminal-setup` in Grok TUI (optional visual check)
 - [x] Re-run audit
 - [ ] Fine-tune `~/.grok/config.toml` for your workflow
 
@@ -108,12 +109,3 @@ wsl -d Ubuntu          # launch Linux shell
 - **Grok launch**: `grok --cwd C:\Projects\your-app` keeps sessions scoped to real projects.
 - **Memory**: Enable cross-session memory with `GROK_MEMORY=1` once you are comfortable with it.
 
-## Note on Home Directory Git
-
-Your home folder (`C:\Users\lauri`) was initialized as a git repo earlier. That is usually unintended. Consider removing it:
-
-```powershell
-Remove-Item -Recurse -Force C:\Users\lauri\.git
-```
-
-Only do this if you did not mean to track your entire home directory.

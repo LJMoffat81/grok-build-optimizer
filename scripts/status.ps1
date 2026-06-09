@@ -27,7 +27,7 @@ $checks += [pscustomobject]@{ Check = "BIOS virtualization"; Status = if ($fwOk)
 $checks += [pscustomobject]@{ Check = "Hypervisor running"; Status = if ($hypervisor) { "OK" } else { "BLOCKED" }; Detail = "HypervisorPresent=$hypervisor" }
 
 # WSL
-$wslNames = @(wsl -l -q 2>$null | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+$wslNames = @(wsl -l -q 2>$null | ForEach-Object { $_.Trim() } | Where-Object { $_ -and $_ -notmatch '^\s*$' })
 $hasUbuntu = $wslNames -contains "Ubuntu" -or ($wslNames | Where-Object { $_ -like "Ubuntu*" }).Count -gt 0
 $wslDetail = if ($hasUbuntu) { ($wslNames -join ", ") + " (WSL2)" } elseif (-not $hypervisor) { "needs BIOS SVM" } else { "run setup-wsl-post-reboot.ps1" }
 $checks += [pscustomobject]@{ Check = "WSL distro"; Status = if ($hasUbuntu) { "OK" } elseif (-not $hypervisor) { "BLOCKED" } else { "PENDING" }; Detail = $wslDetail }
