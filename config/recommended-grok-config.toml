@@ -1,0 +1,32 @@
+# Recommended Grok Build settings for a local Windows dev workstation.
+# Merge into ~/.grok/config.toml — existing keys are never overwritten.
+
+[cli]
+auto_update = true
+
+[models]
+default = "grok-composer-2.5-fast"
+
+[features]
+codebase_indexing = true
+lsp_tools = false
+
+[session]
+auto_compact_threshold_percent = 85
+
+[toolset.bash]
+timeout_secs = 300.0
+output_byte_limit = 50000
+
+[subagents]
+enabled = true
+
+[ui.notifications]
+method = "auto"
+condition = "unfocused"
+sleep_prevention = true
+progress_bar = true
+events = ["turn_complete", "approval_required"]
+
+[tools]
+respect_gitignore = true
