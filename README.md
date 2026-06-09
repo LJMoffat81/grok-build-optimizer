@@ -13,7 +13,7 @@ Tune your Windows workstation for [Grok Build](https://x.ai) AI coding — faste
 | Storage | C: 626 GB free · E: 1.8 TB free |
 | Grok | 0.2.38 |
 | Terminal | Windows Terminal |
-| Dev tools | Git, Node 24, Python 3.12 |
+| Dev tools | Git, Node 24, Python 3.12, Rust 1.96 |
 
 **Status:** All optimizations applied. Power plan **Balanced**, `COLORTERM=truecolor` set, Defender exclusions active. Restart terminal, then run `/terminal-setup` in Grok.
 
@@ -56,6 +56,11 @@ Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
 - [x] Switch off Power Saver (now Balanced)
 - [x] Apply user-level optimizations (PATH, COLORTERM, Grok config)
 - [x] Defender exclusions (applied via elevated script)
+- [x] Startup cleanup (Adobe sync, Edge auto-launch, Jitsi Meet)
+- [x] Rust installed (rustc 1.96, cargo on PATH)
+- [ ] **Reboot PC** (required for WSL)
+- [ ] Enable **AMD-V / SVM** in BIOS if WSL still fails after reboot
+- [ ] Run `.\scripts\setup-wsl-post-reboot.ps1` to install Ubuntu
 - [ ] Restart terminal, then run `/terminal-setup` in Grok
 - [x] Re-run audit
 - [ ] Fine-tune `~/.grok/config.toml` for your workflow
@@ -70,7 +75,32 @@ grok-build-optimizer/
 ├── reports/               # Audit output (gitignored)
 └── scripts/
     ├── audit-system.ps1
-    └── apply-optimizations.ps1
+    ├── apply-optimizations.ps1
+    ├── cleanup-startup.ps1
+    ├── setup-dev-tools.ps1
+    └── setup-wsl-post-reboot.ps1
+```
+
+## Startup Cleanup
+
+Disabled 3 safe startup items (backup in `reports/startup-backup-*`):
+- Adobe Acrobat Synchronizer
+- Microsoft Edge auto-launch
+- Jitsi Meet shortcut
+
+To also disable Teams and MuseHub:
+
+```powershell
+.\scripts\cleanup-startup.ps1 -IncludeOptional
+```
+
+## WSL + Rust
+
+Rust is ready. WSL 2.7.3 is installed but needs a **reboot**, then BIOS virtualization (AMD-V / SVM Mode) if hypervisor is still off:
+
+```powershell
+# After reboot:
+.\scripts\setup-wsl-post-reboot.ps1
 ```
 
 ## Manual Tweaks (optional)

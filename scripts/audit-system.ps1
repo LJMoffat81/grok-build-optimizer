@@ -115,12 +115,16 @@ if ($mp) {
     $report += "Unable to read Defender preferences (may need admin)"
 }
 
-Write-Section "Startup Impact (top 15 by estimated impact)"
-Get-CimInstance Win32_StartupCommand |
-    Select-Object Name, Command, Location -First 15 |
-    Format-Table -AutoSize |
-    Out-String |
-    ForEach-Object { $report += $_ }
+Write-Section "Startup Programs"
+$startup = Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location
+$report += "Count: $($startup.Count)"
+$report += ($startup | Format-Table -AutoSize | Out-String)
+
+Write-Section "Virtualization / WSL"
+$hypervisor = (Get-CimInstance Win32_ComputerSystem).HypervisorPresent
+$report += "Hypervisor present: $hypervisor"
+$report += (wsl --status 2>&1 | Out-String).Trim()
+$report += (wsl -l -v 2>&1 | Out-String).Trim()
 
 Write-Section "Recommendations"
 $issues = @()
