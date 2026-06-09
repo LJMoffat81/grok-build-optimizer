@@ -19,14 +19,16 @@ $ct = [Environment]::GetEnvironmentVariable("COLORTERM", "User")
 $checks += [pscustomobject]@{ Check = "COLORTERM"; Status = if ($ct -eq "truecolor") { "OK" } else { "WARN" }; Detail = $ct }
 
 # Virtualization
-$fw = (systeminfo | Select-String "Virtualization Enabled In Firmware").ToString().Trim()
+$fwLine = systeminfo | Select-String "Virtualization Enabled In Firmware"
+$fw = if ($fwLine) { $fwLine.ToString().Trim() } else { "unknown" }
 $hypervisor = (Get-CimInstance Win32_ComputerSystem).HypervisorPresent
-$checks += [pscustomobject]@{ Check = "BIOS virtualization"; Status = if ($fw -match "Yes") { "OK" } else { "BLOCKED" }; Detail = $fw }
+$fwOk = $fw -match "Yes" -or $hypervisor
+$checks += [pscustomobject]@{ Check = "BIOS virtualization"; Status = if ($fwOk) { "OK" } else { "BLOCKED" }; Detail = if ($fwLine) { $fw } else { "HypervisorPresent=$hypervisor" } }
 $checks += [pscustomobject]@{ Check = "Hypervisor running"; Status = if ($hypervisor) { "OK" } else { "BLOCKED" }; Detail = "HypervisorPresent=$hypervisor" }
 
 # WSL
 $wslList = wsl -l -v 2>&1 | Out-String
-$checks += [pscustomobject]@{ Check = "WSL distro"; Status = if ($wslList -match "Ubuntu") { "OK" } elseif ($fw -match "No") { "BLOCKED" } else { "PENDING" }; Detail = if ($wslList -match "Ubuntu") { "Ubuntu installed" } else { "needs BIOS SVM + reboot" } }
+$checks += [pscustomobject]@{ Check = "WSL distro"; Status = if ($wslList -match "Ubuntu") { "OK" } elseif (-not $hypervisor) { "BLOCKED" } else { "PENDING" }; Detail = if ($wslList -match "Ubuntu") { "Ubuntu installed" } else { "run setup-wsl-post-reboot.ps1" } }
 
 # Startup count
 $startupCount = (Get-CimInstance Win32_StartupCommand).Count

@@ -58,9 +58,8 @@ Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
 - [x] Defender exclusions (applied via elevated script)
 - [x] Startup cleanup (Adobe sync, Edge auto-launch, Jitsi Meet)
 - [x] Rust installed (rustc 1.96, cargo on PATH)
-- [ ] **Reboot PC** (required for WSL)
-- [ ] Enable **AMD-V / SVM** in BIOS if WSL still fails after reboot
-- [ ] Run `.\scripts\setup-wsl-post-reboot.ps1` to install Ubuntu
+- [x] Reboot PC + enable SVM in BIOS
+- [x] WSL2 + Ubuntu 26.04 LTS installed
 - [ ] Restart terminal, then run `/terminal-setup` in Grok
 - [x] Re-run audit
 - [ ] Fine-tune `~/.grok/config.toml` for your workflow
@@ -96,19 +95,11 @@ To also disable Teams and MuseHub:
 
 ## WSL + Rust
 
-Rust is ready (`rustc 1.96`). WSL 2.7.3 is installed but **blocked**: virtualization is off in BIOS.
-
-**Your board:** ASUS ROG CROSSHAIR VIII IMPACT
-
-1. Restart and press **DEL** or **F2** to enter BIOS
-2. **Advanced** → **CPU Configuration** → **SVM Mode** → **Enabled**
-   (alternate: **Advanced** → **AMD CBS** → **CPU Common Options** → **SVM Mode**)
-3. Press **F10** to save and reboot
-4. Then run:
+Rust (`rustc 1.96`) and **Ubuntu 26.04 LTS on WSL2** are installed.
 
 ```powershell
-.\scripts\enable-virtualization.ps1    # verify Windows side (admin)
-.\scripts\setup-wsl-post-reboot.ps1  # install Ubuntu
+wsl -d Ubuntu          # launch Linux shell
+.\scripts\status.ps1   # check all optimizations
 ```
 
 ## Manual Tweaks (optional)
