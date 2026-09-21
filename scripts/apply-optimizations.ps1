@@ -157,13 +157,33 @@ function Merge-GrokConfig {
         $lines.RemoveAt($i)
     }
 
-    if ($added -gt 0 -or $removed -gt 0) {
+    $retiredModels = @{
+        "grok-composer-2.5-fast" = "grok-4.6"
+    }
+    $modelUpgraded = 0
+    $inModels = $false
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -match '^\s*\[([^\]]+)\]\s*$') {
+            $inModels = ($Matches[1] -eq "models")
+            continue
+        }
+        if ($inModels -and $lines[$i] -match '^\s*(default|web_search)\s*=\s*"([^"]+)"') {
+            $key = $Matches[1]
+            $val = $Matches[2]
+            if ($retiredModels.ContainsKey($val)) {
+                $lines[$i] = "$key = `"$($retiredModels[$val])`""
+                $modelUpgraded++
+            }
+        }
+    }
+
+    if ($added -gt 0 -or $removed -gt 0 -or $modelUpgraded -gt 0) {
         $text = ($lines -join "`n").TrimEnd() + "`n"
         if (-not $WhatIf) {
             Set-Content -Path $ConfigPath -Value $text -Encoding UTF8 -NoNewline
         }
     }
-    return $added
+    return ($added + $modelUpgraded)
 }
 
 # --- Power plan ---

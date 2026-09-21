@@ -10,12 +10,12 @@ Tune your Windows workstation for [Grok Build](https://x.ai) AI coding — faste
 | RAM | 32 GB |
 | GPU | AMD Radeon RX 6900 XT |
 | OS | Windows 11 Education (Build 26200) |
-| Storage | C: 626 GB free · E: 1.8 TB free |
-| Grok | 0.2.38 |
+| Storage | C: 647 GB free · E: 1.8 TB free |
+| Grok | 1.0.4 |
 | Terminal | Windows Terminal |
 | Dev tools | Git, Node 24, Python 3.12, Rust 1.96 |
 
-**Status:** All optimizations applied. Power plan **Balanced**, `COLORTERM=truecolor` set, Defender exclusions active. Restart terminal, then run `/terminal-setup` in Grok.
+**Status:** User-level optimizations applied. Power plan **High Performance**, `COLORTERM=truecolor` set, default model **grok-4.6**. **BIOS SVM is still off** — Ubuntu WSL2 is installed but will not run until you enable SVM and reboot.
 
 ## Quick Start
 
@@ -38,32 +38,32 @@ Launch Grok from the project:
 .\scripts\launch-grok.ps1
 ```
 
-Inside Grok, run `/terminal-setup` to verify terminal detection and colors.
+Inside Grok, run `/doctor` (alias `/terminal-setup`) to verify terminal detection and colors.
 
 ## What Gets Optimized
 
 | Area | Action |
 |------|--------|
-| Power plan | Power Saver → Balanced |
+| Power plan | Power Saver → Balanced (or High Performance with `-HighPerformance`) |
 | PATH | Ensures `%USERPROFILE%\.grok\bin` is on User PATH |
 | Terminal | Sets `COLORTERM=truecolor` for accurate Grok TUI colors |
-| Grok config | Merges recommended timeouts, subagents, notifications |
+| Grok config | Merges recommended 1.0.x timeouts, subagents, notifications; upgrades retired model IDs |
 | Defender | Optional exclusions for `.grok`, `Projects`, npm/pip caches |
 
 ## Optimization Checklist
 
 - [x] Run baseline audit
-- [x] Switch off Power Saver (now Balanced)
+- [x] Switch off Power Saver (now High Performance)
 - [x] Apply user-level optimizations (PATH, COLORTERM, Grok config)
 - [x] Defender exclusions (applied via elevated script)
 - [x] Startup cleanup (Adobe sync, Edge auto-launch, Jitsi Meet)
 - [x] Rust installed (rustc 1.96, cargo on PATH)
-- [x] Reboot PC + enable SVM in BIOS
-- [x] WSL2 + Ubuntu 26.04 LTS installed
-- [x] Workstation verified (all checks pass)
-- [ ] Run `/terminal-setup` in Grok TUI (optional visual check)
-- [x] Re-run audit
-- [ ] Fine-tune `~/.grok/config.toml` for your workflow
+- [ ] Enable SVM in BIOS (still off — WSL2 cannot run)
+- [x] Ubuntu 26.04 LTS installed (stopped until SVM is on)
+- [ ] Workstation verified (blocked on BIOS SVM)
+- [ ] Run `/doctor` in Grok TUI (optional visual check)
+- [x] Re-run audit (2026-08-17)
+- [x] Fine-tune `~/.grok/config.toml` for Grok 1.0.4 (`grok-4.6`)
 
 ## Project Structure
 
@@ -77,8 +77,11 @@ grok-build-optimizer/
     ├── audit-system.ps1
     ├── apply-optimizations.ps1
     ├── cleanup-startup.ps1
+    ├── enable-virtualization.ps1
+    ├── launch-grok.ps1
     ├── setup-dev-tools.ps1
-    └── setup-wsl-post-reboot.ps1
+    ├── setup-wsl-post-reboot.ps1
+    └── status.ps1
 ```
 
 ## Startup Cleanup
@@ -96,11 +99,11 @@ To also disable Teams and MuseHub:
 
 ## WSL + Rust
 
-Rust (`rustc 1.96`) and **Ubuntu 26.04 LTS on WSL2** are installed.
+Rust (`rustc 1.96`) and **Ubuntu 26.04 LTS** are installed. WSL2 will not start until **SVM Mode** is enabled in BIOS (ASUS ROG CROSSHAIR VIII IMPACT: Advanced → CPU Configuration → SVM Mode → Enabled → F10).
 
 ```powershell
-wsl -d Ubuntu          # launch Linux shell
 .\scripts\status.ps1   # check all optimizations
+wsl -d Ubuntu          # Linux shell — after SVM is on
 ```
 
 ## Manual Tweaks (optional)

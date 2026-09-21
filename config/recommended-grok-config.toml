@@ -1,11 +1,12 @@
-# Recommended Grok Build settings for a local Windows dev workstation.
+# Recommended Grok Build 1.0.x settings for a local Windows dev workstation.
 # Merge into ~/.grok/config.toml — existing keys are never overwritten.
 
 [cli]
 auto_update = true
 
 [models]
-default = "grok-composer-2.5-fast"
+default = "grok-4.6"
+web_search = "grok-4.6"
 
 [features]
 codebase_indexing = true
@@ -20,6 +21,9 @@ output_byte_limit = 50000
 
 [subagents]
 enabled = true
+
+[ui]
+screen_mode = "fullscreen"
 
 [ui.notifications]
 method = "auto"

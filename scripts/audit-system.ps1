@@ -139,6 +139,16 @@ if (-not $colorTermUser -and -not $env:COLORTERM) {
 if (-not (Get-Command grok -ErrorAction SilentlyContinue)) {
     $issues += "[MED]  grok not on PATH - add %USERPROFILE%\.grok\bin to User PATH."
 }
+if (-not $hypervisor) {
+    $issues += "[HIGH] BIOS virtualization (AMD SVM) is off - WSL2 cannot run until you enable SVM and reboot."
+}
+$configPath = Join-Path $env:USERPROFILE ".grok\config.toml"
+if (Test-Path $configPath) {
+    $cfg = Get-Content $configPath -Raw
+    if ($cfg -match 'default\s*=\s*"grok-composer-2\.5-fast"') {
+        $issues += "[MED]  config.toml still uses retired model grok-composer-2.5-fast - set [models] default = `"grok-4.6`"."
+    }
+}
 if ($issues.Count -eq 0) {
     $report += "No critical issues detected. Review Grok config and Defender exclusions for fine-tuning."
 } else {

@@ -15,7 +15,7 @@ This project tunes a Windows workstation for Grok Build AI development.
 - Prefer reversible, documented changes. Never disable security features without explicit user approval.
 - Use `-WhatIf` on `scripts/apply-optimizations.ps1` first; apply only after the user confirms.
 - Do not store secrets (API keys, tokens) in this repo.
-- Windows-specific: test changes against Grok 0.2.x on Windows 11 with Windows Terminal.
+- Windows-specific: test changes against Grok 1.0.x on Windows 11 with Windows Terminal.
 
 ## Workflow
 
