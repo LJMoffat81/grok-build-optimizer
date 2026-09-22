@@ -24,8 +24,8 @@ $changes = [System.Collections.Generic.List[string]]::new()
 $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 $balancedGuid = "381b4222-f694-41f0-9685-ff5bb260df2e"
-$highPerfGuid = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
 $powerSaverGuid = "a1841308-3541-4fab-bc81-f71556f20b4a"
+. (Join-Path $PSScriptRoot "power-plan.ps1")
 
 function Log-Change($msg) {
     $changes.Add($msg)
@@ -191,17 +191,8 @@ if (-not $SkipPowerPlan) {
     if (-not $isAdmin) {
         Write-Host "Skipping power plan (requires admin). Re-run in elevated PowerShell." -ForegroundColor DarkYellow
     } elseif ($HighPerformance) {
-        if ($WhatIf) {
-            Log-Change "Would switch to High Performance power plan ($highPerfGuid)"
-            Log-Change "Would set minimum processor state to 100% on AC and DC"
-        } else {
-            powercfg /SETACTIVE $highPerfGuid | Out-Null
-            powercfg /SETACVALUEINDEX $highPerfGuid SUB_PROCESSOR PROCTHROTTLEMIN 100 | Out-Null
-            powercfg /SETDCVALUEINDEX $highPerfGuid SUB_PROCESSOR PROCTHROTTLEMIN 100 | Out-Null
-            powercfg /SETACTIVE $highPerfGuid | Out-Null
-            Log-Change "Switched to High Performance power plan"
-            Log-Change "Set minimum processor state to 100% (core parking disabled)"
-        }
+        $result = Set-HighPerformancePlan -WhatIf:$WhatIf
+        foreach ($msg in $result.Messages) { Log-Change $msg }
     } else {
         $active = powercfg /GETACTIVESCHEME
         if ($active -match "Power saver|$powerSaverGuid") {

@@ -40,6 +40,23 @@ Launch Grok from the project:
 
 Inside Grok, run `/doctor` (alias `/terminal-setup`) to verify terminal detection and colors.
 
+## Junk cleanup
+
+The old `pc-cleanup` folder lives here now. It still refuses to touch Documents, Pictures, Desktop, Videos, or project folders. Cleanup logs and undo backups go in `logs\` (gitignored).
+
+Double-click **Clean My PC** on the Desktop, or:
+
+```powershell
+cd C:\Projects\grok-build-optimizer
+.\scripts\pc-cleanup.ps1 -Scan
+.\scripts\pc-cleanup.ps1 -Clean -WhatIf
+.\scripts\pc-cleanup.ps1 -Optimize -WhatIf
+.\scripts\pc-cleanup.ps1 -Optimize -Extras
+.\scripts\pc-cleanup.ps1 -Undo
+```
+
+High Performance power plan changes go through `scripts\power-plan.ps1`. Both this cleanup optimizer and `apply-optimizations.ps1 -HighPerformance` call that one script.
+
 ## What Gets Optimized
 
 | Area | Action |
@@ -72,13 +89,18 @@ grok-build-optimizer/
 ├── AGENTS.md              # Grok project rules
 ├── config/
 │   └── recommended-grok-config.toml
+├── logs/                  # Cleanup logs and undo backups (gitignored)
 ├── reports/               # Audit output (gitignored)
 └── scripts/
     ├── audit-system.ps1
     ├── apply-optimizations.ps1
+    ├── Clean-My-PC.bat
     ├── cleanup-startup.ps1
     ├── enable-virtualization.ps1
     ├── launch-grok.ps1
+    ├── optimize.ps1
+    ├── pc-cleanup.ps1
+    ├── power-plan.ps1
     ├── setup-dev-tools.ps1
     ├── setup-wsl-post-reboot.ps1
     └── status.ps1
